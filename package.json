@@ -1,0 +1,16 @@
+{
+  "name": "full-stack-portfolio",
+  "version": "1.0.0",
+  "description": "Added the backend to the portfolio",
+  "main": "server.js",
+  "scripts": {
+    "backend": "nodemon backend/server.js",
+    "seed": "node backend/seed.js",
+    "frontend": "webpack-dev-server --mode=development --env.NODE_ENV=local",
+    "build": "webpack -p --env.NODE_ENV=production",
+    "start": "node backend/server.js"
+  },
+  "author": "Baltasar Romero",
+  "license": "ISC",
+  "devDependencies": {}
+}
