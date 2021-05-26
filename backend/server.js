@@ -1,15 +1,35 @@
 const express = require('express')
-
 const app = express()
+const { port, dbURI } = require('./config/environment')
+require('dotenv').config()
+const Router = require('./router')
+const mongoose = require('mongoose')
+const path = require('path')
+const dist = path.join(__dirname, 'dist')
 
-app.get('/', function (req, res) {
-  res.send('<h1>Hello</h1>')
+mongoose.connect(
+  dbURI,
+  { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
+  (err) => {
+    // * err -> tells you why you can't connect if you fail to connect
+    if (err) console.log(err)
+    else console.log('Mongoose connected successfully!')
+  }
+)
+
+app.use((req, res, next) => {
+  console.log(`Incoming request, ${req.method} to ${req.url}`)
+  next()
 })
 
-app.get('/contact', function (req, res) {
-  res.send('Contact me at: angela@gmail.com')
+app.use(express.json())
+
+app.use('/api', Router)
+
+app.use('/', express.static(dist))
+
+app.get('*', function (req, res) {
+  res.sendFile(path.join(dist, 'index.html'))
 })
 
-app.listen(5000, function () {
-  console.log('Server started on port 5000')
-})
+app.listen(port)
